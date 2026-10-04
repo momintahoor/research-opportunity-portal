@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Environment variables (secrets)
+.env
+backend/.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build / coverage
+coverage/
+dist/
+build/
+
+# Optional local dumps
+*.sql.gz
+
+# Local tooling / temporary verification helpers (not part of submission)
+.tools/
