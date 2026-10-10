@@ -1,0 +1,211 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Research Opportunity Portal",
+    "description": "API tests for the University Research Opportunity Portal.\n\nRun requests in order. After creating opportunities, copy an ID into the opportunityId collection variable for update/delete demos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "opportunityId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Opportunity - AI Vision",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "if (json.data && json.data.id) {",
+              "  pm.collectionVariables.set('opportunityId', String(json.data.id));",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Deep Learning for Medical Imaging\",\n  \"description\": \"Develop CNN models to detect anomalies in X-ray and MRI scans.\",\n  \"researchArea\": \"Artificial Intelligence\",\n  \"facultyName\": \"Dr. Ayesha Khan\",\n  \"department\": \"Computer Science\",\n  \"requiredSkills\": \"Python, PyTorch, Machine Learning\",\n  \"availablePositions\": 2,\n  \"applicationDeadline\": \"2026-12-15\",\n  \"status\": \"Open\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities"]
+        }
+      }
+    },
+    {
+      "name": "2. Create Opportunity - Computer Networks",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"SDN Traffic Optimization\",\n  \"description\": \"Design and evaluate software-defined networking controllers for campus network traffic optimization.\",\n  \"researchArea\": \"Computer Networks\",\n  \"facultyName\": \"Dr. Bilal Ahmed\",\n  \"department\": \"Computer Science\",\n  \"requiredSkills\": \"Python, Networking, Mininet\",\n  \"availablePositions\": 3,\n  \"applicationDeadline\": \"2026-11-30\",\n  \"status\": \"Open\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities"]
+        }
+      }
+    },
+    {
+      "name": "3. Create Opportunity - Cybersecurity",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"IoT Device Security Analysis\",\n  \"description\": \"Analyze common vulnerabilities in consumer IoT devices and propose lightweight mitigation techniques.\",\n  \"researchArea\": \"Cybersecurity\",\n  \"facultyName\": \"Dr. Sara Malik\",\n  \"department\": \"Cyber Security\",\n  \"requiredSkills\": \"Linux, Network Security, Python\",\n  \"availablePositions\": 1,\n  \"applicationDeadline\": \"2027-01-20\",\n  \"status\": \"Open\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities"]
+        }
+      }
+    },
+    {
+      "name": "4. Get All Opportunities",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities"]
+        }
+      }
+    },
+    {
+      "name": "5. Get One Opportunity by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities/{{opportunityId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities", "{{opportunityId}}"]
+        }
+      }
+    },
+    {
+      "name": "6. Update Opportunity",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Deep Learning for Medical Imaging\",\n  \"description\": \"Updated description: focus on chest X-ray classification and model explainability.\",\n  \"researchArea\": \"Artificial Intelligence\",\n  \"facultyName\": \"Dr. Ayesha Khan\",\n  \"department\": \"Computer Science\",\n  \"requiredSkills\": \"Python, PyTorch, Explainable AI\",\n  \"availablePositions\": 3,\n  \"applicationDeadline\": \"2026-12-20\",\n  \"status\": \"Open\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities/{{opportunityId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities", "{{opportunityId}}"]
+        }
+      }
+    },
+    {
+      "name": "7. Close Opportunity (Open to Closed)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Deep Learning for Medical Imaging\",\n  \"description\": \"Updated description: focus on chest X-ray classification and model explainability.\",\n  \"researchArea\": \"Artificial Intelligence\",\n  \"facultyName\": \"Dr. Ayesha Khan\",\n  \"department\": \"Computer Science\",\n  \"requiredSkills\": \"Python, PyTorch, Explainable AI\",\n  \"availablePositions\": 3,\n  \"applicationDeadline\": \"2026-12-20\",\n  \"status\": \"Closed\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities/{{opportunityId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities", "{{opportunityId}}"]
+        }
+      }
+    },
+    {
+      "name": "8. Delete Opportunity",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities/{{opportunityId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities", "{{opportunityId}}"]
+        }
+      }
+    },
+    {
+      "name": "9. Get Deleted Opportunity (expect 404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities/{{opportunityId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities", "{{opportunityId}}"]
+        }
+      }
+    },
+    {
+      "name": "10. Create with Invalid Data (expect 400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Incomplete Opportunity\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/opportunities",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "opportunities"]
+        }
+      }
+    }
+  ]
+}

@@ -26,8 +26,15 @@ function formatDate(value) {
     return value.toISOString().slice(0, 10);
   }
 
-  const asString = String(value);
-  return asString.slice(0, 10);
+  return String(value).slice(0, 10);
+}
+
+function parseId(paramId) {
+  const id = Number(paramId);
+  if (!Number.isInteger(id) || id <= 0) {
+    return null;
+  }
+  return id;
 }
 
 async function createOpportunity(req, res) {
@@ -105,9 +112,9 @@ async function getAllOpportunities(req, res) {
 
 async function getOpportunityById(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = parseId(req.params.id);
 
-    if (!Number.isInteger(id) || id <= 0) {
+    if (id === null) {
       return res.status(400).json({
         success: false,
         message: 'Invalid opportunity ID'
@@ -140,8 +147,126 @@ async function getOpportunityById(req, res) {
   }
 }
 
+async function updateOpportunity(req, res) {
+  try {
+    const id = parseId(req.params.id);
+
+    if (id === null) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid opportunity ID'
+      });
+    }
+
+    const [existing] = await pool.execute(
+      'SELECT id FROM opportunities WHERE id = ?',
+      [id]
+    );
+
+    if (existing.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Research opportunity not found'
+      });
+    }
+
+    const {
+      title,
+      description,
+      researchArea,
+      facultyName,
+      department,
+      requiredSkills,
+      availablePositions,
+      applicationDeadline,
+      status
+    } = req.body;
+
+    await pool.execute(
+      `UPDATE opportunities SET
+        title = ?,
+        description = ?,
+        research_area = ?,
+        faculty_name = ?,
+        department = ?,
+        required_skills = ?,
+        available_positions = ?,
+        application_deadline = ?,
+        status = ?
+       WHERE id = ?`,
+      [
+        title.trim(),
+        description.trim(),
+        researchArea.trim(),
+        facultyName.trim(),
+        department.trim(),
+        requiredSkills.trim(),
+        Number(availablePositions),
+        applicationDeadline,
+        status,
+        id
+      ]
+    );
+
+    const [rows] = await pool.execute(
+      'SELECT * FROM opportunities WHERE id = ?',
+      [id]
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Research opportunity updated successfully',
+      data: mapOpportunityRow(rows[0])
+    });
+  } catch (error) {
+    console.error('Error updating opportunity:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error'
+    });
+  }
+}
+
+async function deleteOpportunity(req, res) {
+  try {
+    const id = parseId(req.params.id);
+
+    if (id === null) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid opportunity ID'
+      });
+    }
+
+    const [result] = await pool.execute(
+      'DELETE FROM opportunities WHERE id = ?',
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Research opportunity not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Research opportunity deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting opportunity:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error'
+    });
+  }
+}
+
 module.exports = {
   createOpportunity,
   getAllOpportunities,
-  getOpportunityById
+  getOpportunityById,
+  updateOpportunity,
+  deleteOpportunity
 };

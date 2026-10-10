@@ -18,7 +18,6 @@ function isValidDate(value) {
     return false;
   }
 
-  // Expect YYYY-MM-DD
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
     return false;
   }
@@ -27,13 +26,14 @@ function isValidDate(value) {
   return !Number.isNaN(date.getTime()) && date.toISOString().startsWith(value);
 }
 
-function validateCreateOpportunity(req, res, next) {
-  const body = req.body || {};
+function collectFieldErrors(body, { requireAll }) {
   const errors = [];
 
-  for (const field of REQUIRED_FIELDS) {
-    if (body[field] === undefined || body[field] === null || body[field] === '') {
-      errors.push(`${field} is required`);
+  if (requireAll) {
+    for (const field of REQUIRED_FIELDS) {
+      if (body[field] === undefined || body[field] === null || body[field] === '') {
+        errors.push(`${field} is required`);
+      }
     }
   }
 
@@ -108,6 +108,31 @@ function validateCreateOpportunity(req, res, next) {
     }
   }
 
+  return errors;
+}
+
+function validateCreateOpportunity(req, res, next) {
+  const errors = collectFieldErrors(req.body || {}, { requireAll: true });
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Validation failed',
+      errors
+    });
+  }
+
+  next();
+}
+
+function validateUpdateOpportunity(req, res, next) {
+  const body = req.body || {};
+  const errors = collectFieldErrors(body, { requireAll: true });
+
+  if (body.status === undefined || body.status === null || body.status === '') {
+    errors.push('status is required');
+  }
+
   if (errors.length > 0) {
     return res.status(400).json({
       success: false,
@@ -120,5 +145,6 @@ function validateCreateOpportunity(req, res, next) {
 }
 
 module.exports = {
-  validateCreateOpportunity
+  validateCreateOpportunity,
+  validateUpdateOpportunity
 };

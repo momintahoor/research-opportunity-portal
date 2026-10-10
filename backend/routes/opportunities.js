@@ -2,14 +2,21 @@ const express = require('express');
 const {
   createOpportunity,
   getAllOpportunities,
-  getOpportunityById
+  getOpportunityById,
+  updateOpportunity,
+  deleteOpportunity
 } = require('../controllers/opportunityController');
-const { validateCreateOpportunity } = require('../middleware/validateOpportunity');
+const {
+  validateCreateOpportunity,
+  validateUpdateOpportunity
+} = require('../middleware/validateOpportunity');
 
 const router = express.Router();
 
 router.post('/', validateCreateOpportunity, createOpportunity);
 router.get('/', getAllOpportunities);
 router.get('/:id', getOpportunityById);
+router.put('/:id', validateUpdateOpportunity, updateOpportunity);
+router.delete('/:id', deleteOpportunity);
 
 module.exports = router;

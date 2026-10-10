@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunity Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Research Opportunity Portal</a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="index.html">Opportunities</a>
+        <a class="nav-link" href="create.html">Create</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-wrap">
+    <div class="page-header">
+      <div>
+        <h1>Opportunity Details</h1>
+        <p>Complete information for the selected research opening.</p>
+      </div>
+      <a class="btn btn-outline-secondary" href="index.html">Back to List</a>
+    </div>
+
+    <div id="pageAlert" class="alert alert-box" role="alert"></div>
+
+    <div class="panel">
+      <div id="detailsContent">Loading...</div>
+      <div id="detailActions" class="actions mt-4"></div>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/details.js"></script>
+</body>
+</html>

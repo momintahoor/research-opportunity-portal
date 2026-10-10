@@ -8,9 +8,11 @@ const opportunitiesRouter = require('./routes/opportunities');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const frontendPath = path.join(__dirname, '..', 'frontend');
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(frontendPath));
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({
@@ -22,10 +24,14 @@ app.get('/api/health', (req, res) => {
 app.use('/api/opportunities', opportunitiesRouter);
 
 app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({
+      success: false,
+      message: 'Route not found'
+    });
+  }
+
+  return res.status(404).send('Page not found');
 });
 
 app.use((err, req, res, next) => {
@@ -43,6 +49,7 @@ async function startServer() {
 
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Frontend available at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error('Failed to connect to MySQL:', error.message);
