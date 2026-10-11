@@ -1,5 +1,5 @@
 -- University Research Opportunity Portal
--- Database schema (Part 1)
+-- Database schema
 
 CREATE DATABASE IF NOT EXISTS research_portal;
 USE research_portal;
